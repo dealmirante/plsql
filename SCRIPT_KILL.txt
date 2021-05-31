@@ -1,0 +1,7 @@
+select * from v$session where sid = 
+
+alter system kill session '21,1693' sid,session
+alter system kill session ''
+
+CON EL QUERY lockers.sql SE OBTIENE QUIEN TIENE LOCKEADO LA TABLA STOCK 
+DEVELOPED/MIT/LOCKERS.SQL

@@ -1,0 +1,52 @@
+-------------------------------------------------------------------------------------------
+--	LOCKERS.SQL	Diego Lema	dlema@tilsor.com.uy
+-------------------------------------------------------------------------------------------
+--
+--
+--set pagesize 70
+--set linesize 150
+--
+--
+SELECT
+
+	S.sid sid, S.username uname, 'DML' ltype,
+	DECODE (L.lmode,1,'Null', 2,'Row-S', 3,'Row-X', 4,'Share', 5,'S/Row-X', 6,'Exclusive') lmode,
+	DECODE (L.request,0,'No','Yes') blocked, U.name||'.'||O.name details
+
+FROM
+
+	v$session S,  v$lock L,  sys.obj$ O,  sys.user$ U
+
+WHERE
+
+	S.sid 	= L.sid		AND
+ 	L.id1 	= O.obj#	AND
+	L.type 	= 'TM'		AND
+	O.owner#= U.user#(+)
+    /*
+
+UNION ALL
+
+SELECT
+
+	S.sid sid,  S.username uname,
+ 	DECODE (L.type,'TX','TX', 'UL','USR','SYS') ltype,
+ 	DECODE (L.lmode,1,'Null', 2,'Row-S', 3,'Row-X', 4,'Share',  5,'S/Row-X', 6,'Exclusive') lmode,
+ 	DECODE (L.request,0,'No','Yes') blocked,
+ 	DECODE (L.request,0,null,'Esperando en session '||to_char(b.sid)) details
+
+FROM
+
+	v$session S,  v$lock L,  v$lock B
+
+WHERE
+
+	s.sid 	= l.sid		AND
+	l.type 	!= 'TM' 	AND
+	l.id1 	= b.id1(+)	AND
+	b.request(+)= 0
+
+ORDER BY 5 DESC,3 DESC,2,1
+--
+--
+*/

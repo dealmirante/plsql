@@ -1,0 +1,25 @@
+Function PERSONAL.TURNO_EMPLEADO
+  ( pLegajo in number,pEmpresa in number)
+  RETURN  varchar2 IS
+   vTurno personal.modelo_turnos.descrip%type ;
+
+BEGIN
+  Select mt.descrip
+  into   vTurno
+  From   personal.empleado e,
+         personal.modelo_horario_h m,
+         personal.modelo_turnos mt
+  Where  legajo  = pLegajo
+  And    e.empresa = pEmpresa
+  And    e.empresa = m.empresa
+  And    e.modelo_laboral = m.cod_modelo
+  and    m.turno = mt.codigo
+  and    mt.empresa = e.empresa;
+
+    RETURN vTurno ;
+EXCEPTION
+   WHEN no_data_found THEN
+       return null ;
+   WHEN OTHERS THEN
+       return null;
+END;
